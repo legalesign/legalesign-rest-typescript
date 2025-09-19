@@ -31,7 +31,7 @@ describe('resource user', () => {
       first_name: 'first_name',
       last_name: 'last_name',
       groups: '/api/v1/group/IK-GV--w1tvt/',
-      password: 'xxxxxxxx',
+      password: 'password',
       permission: '1',
       timezone: 'Africa/Abidjan',
     });

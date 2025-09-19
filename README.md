@@ -11,7 +11,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 ## Installation
 
 ```sh
-npm install git+ssh://git@github.com:stainless-sdks/legalesign-typescript.git
+npm install git+ssh://git@github.com:legalesign/legalesign-rest-typescript.git
 ```
 
 > [!NOTE]
@@ -29,9 +29,9 @@ const client = new Legalesign({
   apiKey: process.env['LEGALESIGN_API_KEY'], // This is the default and can be omitted
 });
 
-const attachments = await client.attachment.list();
+const groups = await client.group.list();
 
-console.log(attachments.meta);
+console.log(groups.meta);
 ```
 
 ### Request & Response types
@@ -46,7 +46,7 @@ const client = new Legalesign({
   apiKey: process.env['LEGALESIGN_API_KEY'], // This is the default and can be omitted
 });
 
-const attachments: Legalesign.AttachmentListResponse = await client.attachment.list();
+const groups: Legalesign.GroupListResponse = await client.group.list();
 ```
 
 Documentation for each method, request param, and response field are available in docstrings and will appear on hover in most modern editors.
@@ -59,7 +59,7 @@ a subclass of `APIError` will be thrown:
 
 <!-- prettier-ignore -->
 ```ts
-const attachments = await client.attachment.list().catch(async (err) => {
+const groups = await client.group.list().catch(async (err) => {
   if (err instanceof Legalesign.APIError) {
     console.log(err.status); // 400
     console.log(err.name); // BadRequestError
@@ -99,7 +99,7 @@ const client = new Legalesign({
 });
 
 // Or, configure per-request:
-await client.attachment.list({
+await client.group.list({
   maxRetries: 5,
 });
 ```
@@ -116,7 +116,7 @@ const client = new Legalesign({
 });
 
 // Override per-request:
-await client.attachment.list({
+await client.group.list({
   timeout: 5 * 1000,
 });
 ```
@@ -139,13 +139,13 @@ Unlike `.asResponse()` this method consumes the body, returning once it is parse
 ```ts
 const client = new Legalesign();
 
-const response = await client.attachment.list().asResponse();
+const response = await client.group.list().asResponse();
 console.log(response.headers.get('X-My-Header'));
 console.log(response.statusText); // access the underlying Response object
 
-const { data: attachments, response: raw } = await client.attachment.list().withResponse();
+const { data: groups, response: raw } = await client.group.list().withResponse();
 console.log(raw.headers.get('X-My-Header'));
-console.log(attachments.meta);
+console.log(groups.meta);
 ```
 
 ### Logging
@@ -225,7 +225,7 @@ parameter. This library doesn't validate at runtime that the request matches the
 send will be sent as-is.
 
 ```ts
-client.attachment.list({
+client.group.list({
   // ...
   // @ts-expect-error baz is not yet public
   baz: 'undocumented option',
@@ -335,7 +335,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/legalesign-typescript/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/legalesign/legalesign-rest-typescript/issues) with questions, bugs, or suggestions.
 
 ## Requirements
 
