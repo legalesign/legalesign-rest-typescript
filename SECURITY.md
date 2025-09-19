@@ -20,7 +20,7 @@ or products provided by Legalesign, please follow the respective company's secur
 
 ### Legalesign Terms and Policies
 
-Please contact support@legalesign.com for any questions or concerns regarding the security of our services.
+Please contact sales@legalesign.com for any questions or concerns regarding the security of our services.
 
 ---
 

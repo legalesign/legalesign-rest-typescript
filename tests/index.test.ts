@@ -306,13 +306,13 @@ describe('instantiate client', () => {
     test('empty env variable', () => {
       process.env['LEGALESIGN_BASE_URL'] = ''; // empty
       const client = new Legalesign({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://eu-api.legalesign.com/api/v1');
+      expect(client.baseURL).toEqual('https://lon-dev.legalesign.com/api/v1');
     });
 
     test('blank env variable', () => {
       process.env['LEGALESIGN_BASE_URL'] = '  '; // blank
       const client = new Legalesign({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://eu-api.legalesign.com/api/v1');
+      expect(client.baseURL).toEqual('https://lon-dev.legalesign.com/api/v1');
     });
 
     test('in request options', () => {

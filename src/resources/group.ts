@@ -7,13 +7,13 @@ import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
-export class Groups extends APIResource {
+export class Group extends APIResource {
   /**
    * Create group
    *
    * @example
    * ```ts
-   * await client.groups.create({ name: 'xxxx' });
+   * await client.group.create({ name: 'xxxx' });
    * ```
    */
   create(body: GroupCreateParams, options?: RequestOptions): APIPromise<void> {
@@ -29,7 +29,7 @@ export class Groups extends APIResource {
    *
    * @example
    * ```ts
-   * const group = await client.groups.retrieve('groupId');
+   * const group = await client.group.retrieve('groupId');
    * ```
    */
   retrieve(groupID: string, options?: RequestOptions): APIPromise<GroupRetrieveResponse> {
@@ -41,7 +41,7 @@ export class Groups extends APIResource {
    *
    * @example
    * ```ts
-   * await client.groups.update('groupId');
+   * await client.group.update('groupId');
    * ```
    */
   update(groupID: string, body: GroupUpdateParams, options?: RequestOptions): APIPromise<void> {
@@ -57,7 +57,7 @@ export class Groups extends APIResource {
    *
    * @example
    * ```ts
-   * const groups = await client.groups.list();
+   * const groups = await client.group.list();
    * ```
    */
   list(
@@ -166,7 +166,7 @@ export interface GroupListParams {
   offset?: number;
 }
 
-export declare namespace Groups {
+export declare namespace Group {
   export {
     type GroupRetrieveResponse as GroupRetrieveResponse,
     type GroupListResponse as GroupListResponse,

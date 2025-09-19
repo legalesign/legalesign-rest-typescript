@@ -13,6 +13,8 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
+import * as Pagination from './core/pagination';
+import { AbstractPage, type MyOffsetPageParams, MyOffsetPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
@@ -37,13 +39,13 @@ import {
   PdfFieldValidationEnum,
 } from './resources/document';
 import {
+  Group,
   GroupCreateParams,
   GroupListParams,
   GroupListResponse,
   GroupRetrieveResponse,
   GroupUpdateParams,
-  Groups,
-} from './resources/groups';
+} from './resources/group';
 import { Invited, InvitedListParams, InvitedListResponse } from './resources/invited';
 import {
   Member,
@@ -205,7 +207,7 @@ export class Legalesign {
    * API Client for interfacing with the Legalesign API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['LEGALESIGN_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['LEGALESIGN_BASE_URL'] ?? https://eu-api.legalesign.com/api/v1] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['LEGALESIGN_BASE_URL'] ?? https://lon-dev.legalesign.com/api/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -227,7 +229,7 @@ export class Legalesign {
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://eu-api.legalesign.com/api/v1`,
+      baseURL: baseURL || `https://lon-dev.legalesign.com/api/v1`,
     };
 
     this.baseURL = options.baseURL!;
@@ -273,7 +275,7 @@ export class Legalesign {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://eu-api.legalesign.com/api/v1';
+    return this.baseURL !== 'https://lon-dev.legalesign.com/api/v1';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -560,6 +562,25 @@ export class Legalesign {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
+  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
+    path: string,
+    Page: new (...args: any[]) => PageClass,
+    opts?: RequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    return this.requestAPIList(Page, { method: 'get', path, ...opts });
+  }
+
+  requestAPIList<
+    Item = unknown,
+    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
+  >(
+    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
+    options: FinalRequestOptions,
+  ): Pagination.PagePromise<PageClass, Item> {
+    const request = this.makeRequest(options, null, undefined);
+    return new Pagination.PagePromise<PageClass, Item>(this as any as Legalesign, request, Page);
+  }
+
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -794,7 +815,7 @@ export class Legalesign {
 
   attachment: API.Attachment = new API.Attachment(this);
   document: API.Document = new API.Document(this);
-  groups: API.Groups = new API.Groups(this);
+  group: API.Group = new API.Group(this);
   invited: API.Invited = new API.Invited(this);
   member: API.Member = new API.Member(this);
   notifications: API.Notifications = new API.Notifications(this);
@@ -810,7 +831,7 @@ export class Legalesign {
 
 Legalesign.Attachment = Attachment;
 Legalesign.Document = Document;
-Legalesign.Groups = Groups;
+Legalesign.Group = Group;
 Legalesign.Invited = Invited;
 Legalesign.Member = Member;
 Legalesign.Notifications = Notifications;
@@ -825,6 +846,9 @@ Legalesign.User = User;
 
 export declare namespace Legalesign {
   export type RequestOptions = Opts.RequestOptions;
+
+  export import MyOffsetPage = Pagination.MyOffsetPage;
+  export { type MyOffsetPageParams as MyOffsetPageParams, type MyOffsetPageResponse as MyOffsetPageResponse };
 
   export {
     Attachment as Attachment,
@@ -849,7 +873,7 @@ export declare namespace Legalesign {
   };
 
   export {
-    Groups as Groups,
+    Group as Group,
     type GroupRetrieveResponse as GroupRetrieveResponse,
     type GroupListResponse as GroupListResponse,
     type GroupCreateParams as GroupCreateParams,

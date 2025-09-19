@@ -35,19 +35,19 @@ Methods:
 - <code title="get /document/{docId}/fields/">client.document.<a href="./src/resources/document.ts">getFields</a>(docID) -> DocumentGetFieldsResponse</code>
 - <code title="post /document/preview/">client.document.<a href="./src/resources/document.ts">preview</a>({ ...params }) -> void</code>
 
-# Groups
+# Group
 
 Types:
 
-- <code><a href="./src/resources/groups.ts">GroupRetrieveResponse</a></code>
-- <code><a href="./src/resources/groups.ts">GroupListResponse</a></code>
+- <code><a href="./src/resources/group.ts">GroupRetrieveResponse</a></code>
+- <code><a href="./src/resources/group.ts">GroupListResponse</a></code>
 
 Methods:
 
-- <code title="post /group/">client.groups.<a href="./src/resources/groups.ts">create</a>({ ...params }) -> void</code>
-- <code title="get /group/{groupId}/">client.groups.<a href="./src/resources/groups.ts">retrieve</a>(groupID) -> GroupRetrieveResponse</code>
-- <code title="patch /group/{groupId}/">client.groups.<a href="./src/resources/groups.ts">update</a>(groupID, { ...params }) -> void</code>
-- <code title="get /group/">client.groups.<a href="./src/resources/groups.ts">list</a>({ ...params }) -> GroupListResponse</code>
+- <code title="post /group/">client.group.<a href="./src/resources/group.ts">create</a>({ ...params }) -> void</code>
+- <code title="get /group/{groupId}/">client.group.<a href="./src/resources/group.ts">retrieve</a>(groupID) -> GroupRetrieveResponse</code>
+- <code title="patch /group/{groupId}/">client.group.<a href="./src/resources/group.ts">update</a>(groupID, { ...params }) -> void</code>
+- <code title="get /group/">client.group.<a href="./src/resources/group.ts">list</a>({ ...params }) -> GroupListResponse</code>
 
 # Invited
 
