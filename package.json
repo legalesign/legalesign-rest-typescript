@@ -1,6 +1,6 @@
 {
   "name": "legalesign",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The official TypeScript library for the Legalesign API",
   "author": "Legalesign <sales@legalesign.com>",
   "types": "dist/index.d.ts",
