@@ -37,13 +37,13 @@ import {
   PdfFieldValidationEnum,
 } from './resources/document';
 import {
-  Group,
   GroupCreateParams,
   GroupListParams,
   GroupListResponse,
   GroupRetrieveResponse,
   GroupUpdateParams,
-} from './resources/group';
+  Groups,
+} from './resources/groups';
 import { Invited, InvitedListParams, InvitedListResponse } from './resources/invited';
 import {
   Member,
@@ -794,7 +794,7 @@ export class Legalesign {
 
   attachment: API.Attachment = new API.Attachment(this);
   document: API.Document = new API.Document(this);
-  group: API.Group = new API.Group(this);
+  groups: API.Groups = new API.Groups(this);
   invited: API.Invited = new API.Invited(this);
   member: API.Member = new API.Member(this);
   notifications: API.Notifications = new API.Notifications(this);
@@ -810,7 +810,7 @@ export class Legalesign {
 
 Legalesign.Attachment = Attachment;
 Legalesign.Document = Document;
-Legalesign.Group = Group;
+Legalesign.Groups = Groups;
 Legalesign.Invited = Invited;
 Legalesign.Member = Member;
 Legalesign.Notifications = Notifications;
@@ -849,7 +849,7 @@ export declare namespace Legalesign {
   };
 
   export {
-    Group as Group,
+    Groups as Groups,
     type GroupRetrieveResponse as GroupRetrieveResponse,
     type GroupListResponse as GroupListResponse,
     type GroupCreateParams as GroupCreateParams,

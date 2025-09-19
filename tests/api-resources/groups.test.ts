@@ -7,10 +7,10 @@ const client = new Legalesign({
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
 
-describe('resource group', () => {
+describe('resource groups', () => {
   // Prism tests are disabled
   test.skip('create: only required params', async () => {
-    const responsePromise = client.group.create({ name: 'xxxx' });
+    const responsePromise = client.groups.create({ name: 'xxxx' });
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -22,12 +22,12 @@ describe('resource group', () => {
 
   // Prism tests are disabled
   test.skip('create: required and optional params', async () => {
-    const response = await client.group.create({ name: 'xxxx', xframe_allow: true });
+    const response = await client.groups.create({ name: 'xxxx', xframe_allow: true });
   });
 
   // Prism tests are disabled
   test.skip('retrieve', async () => {
-    const responsePromise = client.group.retrieve('groupId');
+    const responsePromise = client.groups.retrieve('groupId');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -39,7 +39,7 @@ describe('resource group', () => {
 
   // Prism tests are disabled
   test.skip('update', async () => {
-    const responsePromise = client.group.update('groupId', {});
+    const responsePromise = client.groups.update('groupId', {});
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -51,7 +51,7 @@ describe('resource group', () => {
 
   // Prism tests are disabled
   test.skip('list', async () => {
-    const responsePromise = client.group.list();
+    const responsePromise = client.groups.list();
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -65,7 +65,7 @@ describe('resource group', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.group.list({ limit: 0, offset: 0 }, { path: '/_stainless_unknown_path' }),
+      client.groups.list({ limit: 0, offset: 0 }, { path: '/_stainless_unknown_path' }),
     ).rejects.toThrow(Legalesign.NotFoundError);
   });
 });

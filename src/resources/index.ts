@@ -21,13 +21,13 @@ export {
   type DocumentPreviewParams,
 } from './document';
 export {
-  Group,
+  Groups,
   type GroupRetrieveResponse,
   type GroupListResponse,
   type GroupCreateParams,
   type GroupUpdateParams,
   type GroupListParams,
-} from './group';
+} from './groups';
 export { Invited, type InvitedListResponse, type InvitedListParams } from './invited';
 export {
   Member,
