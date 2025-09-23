@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.1.0 (2025-09-19)
+## 0.1.0 (2025-09-23)
 
 Full Changelog: [v0.0.1...v0.1.0](https://github.com/legalesign/legalesign-rest-typescript/compare/v0.0.1...v0.1.0)
 
@@ -13,4 +13,6 @@ Full Changelog: [v0.0.1...v0.1.0](https://github.com/legalesign/legalesign-rest-
 ### Chores
 
 * configure new SDK language ([a5dc843](https://github.com/legalesign/legalesign-rest-typescript/commit/a5dc8436b45f602075fe663bf9464c68601fcb0d))
+* sync repo ([2474876](https://github.com/legalesign/legalesign-rest-typescript/commit/2474876af68ac0a9ea37563eb3f0a9c0e609dfb1))
+* update SDK settings ([f74b646](https://github.com/legalesign/legalesign-rest-typescript/commit/f74b64628a270bdb8337b6ab8f2aa748fba99f21))
 * update SDK settings ([c9289a3](https://github.com/legalesign/legalesign-rest-typescript/commit/c9289a3694aa731073ac7b99c2b2a5747251d593))

@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as AttachmentAPI from './attachment';
 import * as SignerAPI from './signer';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
@@ -13,32 +12,15 @@ export class Status extends APIResource {
    *
    * @example
    * ```ts
-   * const statusResponse = await client.status.retrieve(
-   *   'docId',
-   * );
+   * const status = await client.status.retrieve('docId');
    * ```
    */
-  retrieve(docID: string, options?: RequestOptions): APIPromise<StatusResponse> {
+  retrieve(docID: string, options?: RequestOptions): APIPromise<StatusRetrieveResponse> {
     return this._client.get(path`/status/${docID}/`, options);
-  }
-
-  /**
-   * Shortened faster query for status of signing documents
-   *
-   * @example
-   * ```ts
-   * const response = await client.status.retrieveAll();
-   * ```
-   */
-  retrieveAll(
-    query: StatusRetrieveAllParams | null | undefined = {},
-    options?: RequestOptions,
-  ): APIPromise<StatusRetrieveAllResponse> {
-    return this._client.get('/status/', { query, ...options });
   }
 }
 
-export interface StatusResponse {
+export interface StatusRetrieveResponse {
   archived?: boolean;
 
   download_final?: boolean;
@@ -69,34 +51,6 @@ export interface StatusResponse {
   tag2?: string;
 }
 
-export interface StatusRetrieveAllResponse {
-  meta?: AttachmentAPI.ListMeta;
-
-  objects?: Array<StatusResponse>;
-}
-
-export interface StatusRetrieveAllParams {
-  /**
-   * Filter on archived status, default is false
-   */
-  filter?: string;
-
-  /**
-   * Length of dataset to return. Use with offset query to iterate through results.
-   */
-  limit?: number;
-
-  /**
-   * Offset from start of dataset. Use with the limit query to iterate through
-   * dataset.
-   */
-  offset?: number;
-}
-
 export declare namespace Status {
-  export {
-    type StatusResponse as StatusResponse,
-    type StatusRetrieveAllResponse as StatusRetrieveAllResponse,
-    type StatusRetrieveAllParams as StatusRetrieveAllParams,
-  };
+  export { type StatusRetrieveResponse as StatusRetrieveResponse };
 }

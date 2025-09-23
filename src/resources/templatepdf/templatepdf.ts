@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AttachmentAPI from '../attachment';
+import * as DocumentAPI from '../document';
 import * as FieldsAPI from './fields';
 import { FieldCreateParams, FieldListResponse, Fields } from './fields';
 import { APIPromise } from '../../core/api-promise';
@@ -61,36 +61,6 @@ export class Templatepdf extends APIResource {
   }
 
   /**
-   * Delists the PDF
-   *
-   * @example
-   * ```ts
-   * await client.templatepdf.archive('pdfId');
-   * ```
-   */
-  archive(pdfID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/templatepdf/${pdfID}/archive/`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
-  }
-
-  /**
-   * Convert any text tags in the PDF into fields
-   *
-   * @example
-   * ```ts
-   * await client.templatepdf.convertTags('pdfId');
-   * ```
-   */
-  convertTags(pdfID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/templatepdf/${pdfID}/tags/`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
-  }
-
-  /**
    * Get PDF embeddable link
    *
    * @example
@@ -142,7 +112,7 @@ export interface TemplatePdf {
 }
 
 export interface TemplatepdfListResponse {
-  meta?: AttachmentAPI.ListMeta;
+  meta?: DocumentAPI.ListMeta;
 
   objects?: Array<TemplatePdf>;
 }

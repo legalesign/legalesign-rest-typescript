@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { Legalesign } from 'legalesign';
+import { LegalesignSDK } from 'legalesign-sdk';
 
-const { stringifyQuery } = Legalesign.prototype as any;
+const { stringifyQuery } = LegalesignSDK.prototype as any;
 
 describe(stringifyQuery, () => {
   for (const [input, expected] of [

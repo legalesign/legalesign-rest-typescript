@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'legalesign/internal/uploads';
-import { toFile } from 'legalesign/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'legalesign-sdk/internal/uploads';
+import { toFile } from 'legalesign-sdk/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

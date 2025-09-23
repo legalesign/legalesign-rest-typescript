@@ -1,8 +1,8 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Legalesign from 'legalesign';
+import LegalesignSDK from 'legalesign-sdk';
 
-const client = new Legalesign({
+const client = new LegalesignSDK({
   apiKey: 'My API Key',
   baseURL: process.env['TEST_API_BASE_URL'] ?? 'http://127.0.0.1:4010',
 });
@@ -130,18 +130,6 @@ describe('resource document', () => {
   });
 
   // Prism tests are disabled
-  test.skip('deletePermanently', async () => {
-    const responsePromise = client.document.deletePermanently('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
-    const rawResponse = await responsePromise.asResponse();
-    expect(rawResponse).toBeInstanceOf(Response);
-    const response = await responsePromise;
-    expect(response).not.toBeInstanceOf(Response);
-    const dataAndResponse = await responsePromise.withResponse();
-    expect(dataAndResponse.data).toBe(response);
-    expect(dataAndResponse.response).toBe(rawResponse);
-  });
-
-  // Prism tests are disabled
   test.skip('getFields', async () => {
     const responsePromise = client.document.getFields('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
@@ -153,9 +141,9 @@ describe('resource document', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism doesn't properly handle redirects
-  test.skip('preview', async () => {
-    const responsePromise = client.document.preview({});
+  // Prism tests are disabled
+  test.skip('permanentlyDelete', async () => {
+    const responsePromise = client.document.permanentlyDelete('182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;

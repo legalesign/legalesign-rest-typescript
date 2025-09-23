@@ -1,11 +1,11 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import type { Legalesign } from '../client';
+import type { LegalesignSDK } from '../client';
 
 export abstract class APIResource {
-  protected _client: Legalesign;
+  protected _client: LegalesignSDK;
 
-  constructor(client: Legalesign) {
+  constructor(client: LegalesignSDK) {
     this._client = client;
   }
 }

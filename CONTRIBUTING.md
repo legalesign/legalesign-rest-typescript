@@ -55,12 +55,12 @@ $ cd legalesign-rest-typescript
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link legalesign
+$ yarn link legalesign-sdk
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global legalesign
+$ pnpm link -—global legalesign-sdk
 ```
 
 ## Running tests

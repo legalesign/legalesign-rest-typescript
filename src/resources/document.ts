@@ -2,7 +2,6 @@
 
 import { APIResource } from '../core/resource';
 import * as DocumentAPI from './document';
-import * as AttachmentAPI from './attachment';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -79,45 +78,6 @@ export class Document extends APIResource {
   }
 
   /**
-   * Permanently deletes data and files. You must enable group automated deletion. We
-   * recommend archiveDocument.
-   *
-   * @example
-   * ```ts
-   * await client.document.deletePermanently(
-   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-   * );
-   * ```
-   */
-  deletePermanently(docID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/document/${docID}/delete/`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
-  }
-
-  /**
-   * Download pdf of audit log
-   *
-   * @example
-   * ```ts
-   * const response = await client.document.downloadAuditLog(
-   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-   * );
-   *
-   * const content = await response.blob();
-   * console.log(content);
-   * ```
-   */
-  downloadAuditLog(docID: string, options?: RequestOptions): APIPromise<Response> {
-    return this._client.get(path`/document/${docID}/auditlog/`, {
-      ...options,
-      headers: buildHeaders([{ Accept: 'application/pdf' }, options?.headers]),
-      __binaryResponse: true,
-    });
-  }
-
-  /**
    * Get document fields
    *
    * @example
@@ -132,18 +92,18 @@ export class Document extends APIResource {
   }
 
   /**
-   * Returns a redirect response (302) with link in the Location header to a one-use
-   * temporary URL you can redirect to, to see a preview of the signing page. Follow
-   * the redirect immediately since it expires after a few seconds.
+   * Permanently deletes data and files. You must enable group automated deletion. We
+   * recommend archiveDocument.
    *
    * @example
    * ```ts
-   * await client.document.preview();
+   * await client.document.permanentlyDelete(
+   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
+   * );
    * ```
    */
-  preview(body: DocumentPreviewParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.post('/document/preview/', {
-      body,
+  permanentlyDelete(docID: string, options?: RequestOptions): APIPromise<void> {
+    return this._client.delete(path`/document/${docID}/delete/`, {
       ...options,
       headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
     });
@@ -166,6 +126,21 @@ export class Document extends APIResource {
  * * `50` - Rejected
  */
 export type DocumentStatusEnum = 10 | 20 | 30 | 40 | 50;
+
+export interface ListMeta {
+  limit?: number;
+
+  next?: string | null;
+
+  offset?: number;
+
+  previous?: string | null;
+
+  /**
+   * total number of objects
+   */
+  total_count?: number;
+}
 
 /**
  * fields types and validations:
@@ -503,7 +478,7 @@ export interface DocumentRetrieveResponse {
 }
 
 export interface DocumentListResponse {
-  meta?: AttachmentAPI.ListMeta;
+  meta?: ListMeta;
 
   objects?: Array<DocumentListResponse.Object>;
 }
@@ -972,19 +947,10 @@ export interface DocumentListParams {
   status?: number;
 }
 
-export interface DocumentPreviewParams {
-  group?: string;
-
-  signee_count?: number;
-
-  text?: string;
-
-  title?: string;
-}
-
 export declare namespace Document {
   export {
     type DocumentStatusEnum as DocumentStatusEnum,
+    type ListMeta as ListMeta,
     type PdfFieldValidationEnum as PdfFieldValidationEnum,
     type DocumentCreateResponse as DocumentCreateResponse,
     type DocumentRetrieveResponse as DocumentRetrieveResponse,
@@ -992,6 +958,5 @@ export declare namespace Document {
     type DocumentGetFieldsResponse as DocumentGetFieldsResponse,
     type DocumentCreateParams as DocumentCreateParams,
     type DocumentListParams as DocumentListParams,
-    type DocumentPreviewParams as DocumentPreviewParams,
   };
 }

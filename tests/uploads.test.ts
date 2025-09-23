@@ -1,6 +1,6 @@
 import fs from 'fs';
-import type { ResponseLike } from 'legalesign/internal/to-file';
-import { toFile } from 'legalesign/core/uploads';
+import type { ResponseLike } from 'legalesign-sdk/internal/to-file';
+import { toFile } from 'legalesign-sdk/core/uploads';
 import { File } from 'node:buffer';
 
 class MyClass {
@@ -97,7 +97,7 @@ describe('missing File error message', () => {
   });
 
   test('is thrown', async () => {
-    const uploads = await import('legalesign/core/uploads');
+    const uploads = await import('legalesign-sdk/core/uploads');
     await expect(
       uploads.toFile(mockResponse({ url: 'https://example.com/my/audio.mp3' })),
     ).rejects.toMatchInlineSnapshot(

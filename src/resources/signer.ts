@@ -35,39 +35,6 @@ export class Signer extends APIResource {
   }
 
   /**
-   * Returns reason signer gave for rejecting a document, if given
-   *
-   * @example
-   * ```ts
-   * const response = await client.signer.getRejectionReason(
-   *   'signerId',
-   * );
-   * ```
-   */
-  getRejectionReason(
-    signerID: string,
-    options?: RequestOptions,
-  ): APIPromise<SignerGetRejectionReasonResponse> {
-    return this._client.get(path`/signer/${signerID}/rejection/`, options);
-  }
-
-  /**
-   * Reset to an earlier signer if forwarded
-   *
-   * @example
-   * ```ts
-   * await client.signer.reset('signerId', { email: 'email' });
-   * ```
-   */
-  reset(signerID: string, body: SignerResetParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.post(path`/signer/${signerID}/reset/`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
-  }
-
-  /**
    * Get signer form fields
    *
    * @example
@@ -160,12 +127,6 @@ export interface SignerRetrieveResponse {
   status?: SignerStatusEnum;
 }
 
-export interface SignerGetRejectionReasonResponse {
-  reason?: string;
-
-  status?: number;
-}
-
 export type SignerRetrieveFieldsResponse =
   Array<SignerRetrieveFieldsResponse.SignerRetrieveFieldsResponseItem>;
 
@@ -186,18 +147,6 @@ export namespace SignerRetrieveFieldsResponse {
   }
 }
 
-export interface SignerResetParams {
-  /**
-   * Email of signer to revert to.
-   */
-  email: string;
-
-  /**
-   * Email notify current signer access is being withdrawn
-   */
-  notify?: boolean;
-}
-
 export interface SignerSendReminderParams {
   /**
    * custom message text, html will be stripped
@@ -209,9 +158,7 @@ export declare namespace Signer {
   export {
     type SignerStatusEnum as SignerStatusEnum,
     type SignerRetrieveResponse as SignerRetrieveResponse,
-    type SignerGetRejectionReasonResponse as SignerGetRejectionReasonResponse,
     type SignerRetrieveFieldsResponse as SignerRetrieveFieldsResponse,
-    type SignerResetParams as SignerResetParams,
     type SignerSendReminderParams as SignerSendReminderParams,
   };
 }
