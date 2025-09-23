@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as AttachmentAPI from './attachment';
+import * as DocumentAPI from './document';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -34,22 +34,6 @@ export class Group extends APIResource {
    */
   retrieve(groupID: string, options?: RequestOptions): APIPromise<GroupRetrieveResponse> {
     return this._client.get(path`/group/${groupID}/`, options);
-  }
-
-  /**
-   * Update group
-   *
-   * @example
-   * ```ts
-   * await client.group.update('groupId');
-   * ```
-   */
-  update(groupID: string, body: GroupUpdateParams, options?: RequestOptions): APIPromise<void> {
-    return this._client.patch(path`/group/${groupID}/`, {
-      body,
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
   }
 
   /**
@@ -111,7 +95,7 @@ export interface GroupRetrieveResponse {
 }
 
 export interface GroupListResponse {
-  meta?: AttachmentAPI.ListMeta;
+  meta?: DocumentAPI.ListMeta;
 
   objects?: Array<GroupListResponse.Object>;
 }
@@ -149,10 +133,6 @@ export interface GroupCreateParams {
   xframe_allow?: boolean;
 }
 
-export interface GroupUpdateParams {
-  public_name?: string;
-}
-
 export interface GroupListParams {
   /**
    * Length of dataset to return. Use with offset query to iterate through results.
@@ -171,7 +151,6 @@ export declare namespace Group {
     type GroupRetrieveResponse as GroupRetrieveResponse,
     type GroupListResponse as GroupListResponse,
     type GroupCreateParams as GroupCreateParams,
-    type GroupUpdateParams as GroupUpdateParams,
     type GroupListParams as GroupListParams,
   };
 }

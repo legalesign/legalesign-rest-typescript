@@ -1,7 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../../core/resource';
-import * as AttachmentAPI from '../attachment';
 import * as DocumentAPI from '../document';
 import { APIPromise } from '../../core/api-promise';
 import { buildHeaders } from '../../internal/headers';
@@ -57,7 +56,7 @@ export class Fields extends APIResource {
 }
 
 export interface FieldListResponse {
-  meta?: AttachmentAPI.ListMeta;
+  meta?: DocumentAPI.ListMeta;
 
   objects?: Array<FieldListResponse.Object>;
 }

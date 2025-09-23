@@ -1,12 +1,12 @@
 {
-  "name": "legalesign",
-  "version": "0.1.0",
-  "description": "The official TypeScript library for the Legalesign API",
-  "author": "Legalesign <sales@legalesign.com>",
+  "name": "legalesign-sdk",
+  "version": "0.0.1",
+  "description": "The official TypeScript library for the Legalesign SDK API",
+  "author": "Legalesign SDK <support@legalesign.com>",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "type": "commonjs",
-  "repository": "github:legalesign/legalesign-rest-typescript",
+  "repository": "github:stainless-sdks/legalesign-sdk-typescript",
   "license": "Apache-2.0",
   "packageManager": "yarn@1.22.22",
   "files": [

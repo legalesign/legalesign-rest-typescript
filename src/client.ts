@@ -13,19 +13,9 @@ import * as Shims from './internal/shims';
 import * as Opts from './internal/request-options';
 import { VERSION } from './version';
 import * as Errors from './core/error';
-import * as Pagination from './core/pagination';
-import { AbstractPage, type MyOffsetPageParams, MyOffsetPageResponse } from './core/pagination';
 import * as Uploads from './core/uploads';
 import * as API from './resources/index';
 import { APIPromise } from './core/api-promise';
-import {
-  Attachment,
-  AttachmentListParams,
-  AttachmentListResponse,
-  AttachmentResponse,
-  AttachmentUploadParams,
-  ListMeta,
-} from './resources/attachment';
 import {
   Document,
   DocumentCreateParams,
@@ -33,9 +23,9 @@ import {
   DocumentGetFieldsResponse,
   DocumentListParams,
   DocumentListResponse,
-  DocumentPreviewParams,
   DocumentRetrieveResponse,
   DocumentStatusEnum,
+  ListMeta,
   PdfFieldValidationEnum,
 } from './resources/document';
 import {
@@ -44,35 +34,16 @@ import {
   GroupListParams,
   GroupListResponse,
   GroupRetrieveResponse,
-  GroupUpdateParams,
 } from './resources/group';
-import { Invited, InvitedListParams, InvitedListResponse } from './resources/invited';
-import {
-  Member,
-  MemberCreateParams,
-  MemberListParams,
-  MemberListResponse,
-  MemberResponse,
-  PermissionsEnum,
-} from './resources/member';
-import { NotificationListResponse, Notifications, WebhookEventFilterEnum } from './resources/notifications';
-import { Pdf, PdfCreatePreviewParams } from './resources/pdf';
+import { Pdf } from './resources/pdf';
 import {
   Signer,
-  SignerGetRejectionReasonResponse,
-  SignerResetParams,
   SignerRetrieveFieldsResponse,
   SignerRetrieveResponse,
   SignerSendReminderParams,
   SignerStatusEnum,
 } from './resources/signer';
-import {
-  Status,
-  StatusResponse,
-  StatusRetrieveAllParams,
-  StatusRetrieveAllResponse,
-} from './resources/status';
-import { Subscribe, SubscribeCreateWebhookParams } from './resources/subscribe';
+import { Status, StatusRetrieveResponse } from './resources/status';
 import {
   Template,
   TemplateCreateParams,
@@ -81,14 +52,6 @@ import {
   TemplateRetrieveResponse,
   TemplateUpdateParams,
 } from './resources/template';
-import { Unsubscribe, UnsubscribeDeleteWebhookParams } from './resources/unsubscribe';
-import {
-  TimezoneEnum,
-  User,
-  UserCreateParams,
-  UserRetrieveResponse,
-  UserUpdateParams,
-} from './resources/user';
 import {
   TemplatePdf,
   Templatepdf,
@@ -112,14 +75,14 @@ import { isEmptyObj } from './internal/utils/values';
 
 export interface ClientOptions {
   /**
-   * Defaults to process.env['LEGALESIGN_API_KEY'].
+   * Defaults to process.env['LEGALESIGN_SDK_API_KEY'].
    */
   apiKey?: string | undefined;
 
   /**
    * Override the default base URL for the API, e.g., "https://api.example.com/v2/"
    *
-   * Defaults to process.env['LEGALESIGN_BASE_URL'].
+   * Defaults to process.env['LEGALESIGN_SDK_BASE_URL'].
    */
   baseURL?: string | null | undefined;
 
@@ -173,7 +136,7 @@ export interface ClientOptions {
   /**
    * Set the log level.
    *
-   * Defaults to process.env['LEGALESIGN_LOG'] or 'warn' if it isn't set.
+   * Defaults to process.env['LEGALESIGN_SDK_LOG'] or 'warn' if it isn't set.
    */
   logLevel?: LogLevel | undefined;
 
@@ -186,9 +149,9 @@ export interface ClientOptions {
 }
 
 /**
- * API Client for interfacing with the Legalesign API.
+ * API Client for interfacing with the Legalesign SDK API.
  */
-export class Legalesign {
+export class LegalesignSDK {
   apiKey: string;
 
   baseURL: string;
@@ -204,10 +167,10 @@ export class Legalesign {
   private _options: ClientOptions;
 
   /**
-   * API Client for interfacing with the Legalesign API.
+   * API Client for interfacing with the Legalesign SDK API.
    *
-   * @param {string | undefined} [opts.apiKey=process.env['LEGALESIGN_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['LEGALESIGN_BASE_URL'] ?? https://lon-dev.legalesign.com/api/v1] - Override the default base URL for the API.
+   * @param {string | undefined} [opts.apiKey=process.env['LEGALESIGN_SDK_API_KEY'] ?? undefined]
+   * @param {string} [opts.baseURL=process.env['LEGALESIGN_SDK_BASE_URL'] ?? https://eu-api.legalesign.com/api/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -216,31 +179,31 @@ export class Legalesign {
    * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
    */
   constructor({
-    baseURL = readEnv('LEGALESIGN_BASE_URL'),
-    apiKey = readEnv('LEGALESIGN_API_KEY'),
+    baseURL = readEnv('LEGALESIGN_SDK_BASE_URL'),
+    apiKey = readEnv('LEGALESIGN_SDK_API_KEY'),
     ...opts
   }: ClientOptions = {}) {
     if (apiKey === undefined) {
-      throw new Errors.LegalesignError(
-        "The LEGALESIGN_API_KEY environment variable is missing or empty; either provide it, or instantiate the Legalesign client with an apiKey option, like new Legalesign({ apiKey: 'My API Key' }).",
+      throw new Errors.LegalesignSDKError(
+        "The LEGALESIGN_SDK_API_KEY environment variable is missing or empty; either provide it, or instantiate the LegalesignSDK client with an apiKey option, like new LegalesignSDK({ apiKey: 'My API Key' }).",
       );
     }
 
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://lon-dev.legalesign.com/api/v1`,
+      baseURL: baseURL || `https://eu-api.legalesign.com/api/v1`,
     };
 
     this.baseURL = options.baseURL!;
-    this.timeout = options.timeout ?? Legalesign.DEFAULT_TIMEOUT /* 1 minute */;
+    this.timeout = options.timeout ?? LegalesignSDK.DEFAULT_TIMEOUT /* 1 minute */;
     this.logger = options.logger ?? console;
     const defaultLogLevel = 'warn';
     // Set default logLevel early so that we can log a warning in parseLogLevel.
     this.logLevel = defaultLogLevel;
     this.logLevel =
       parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this) ??
-      parseLogLevel(readEnv('LEGALESIGN_LOG'), "process.env['LEGALESIGN_LOG']", this) ??
+      parseLogLevel(readEnv('LEGALESIGN_SDK_LOG'), "process.env['LEGALESIGN_SDK_LOG']", this) ??
       defaultLogLevel;
     this.fetchOptions = options.fetchOptions;
     this.maxRetries = options.maxRetries ?? 2;
@@ -275,7 +238,7 @@ export class Legalesign {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://lon-dev.legalesign.com/api/v1';
+    return this.baseURL !== 'https://eu-api.legalesign.com/api/v1';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {
@@ -303,7 +266,7 @@ export class Legalesign {
         if (value === null) {
           return `${encodeURIComponent(key)}=`;
         }
-        throw new Errors.LegalesignError(
+        throw new Errors.LegalesignSDKError(
           `Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`,
         );
       })
@@ -562,25 +525,6 @@ export class Legalesign {
     return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
   }
 
-  getAPIList<Item, PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>>(
-    path: string,
-    Page: new (...args: any[]) => PageClass,
-    opts?: RequestOptions,
-  ): Pagination.PagePromise<PageClass, Item> {
-    return this.requestAPIList(Page, { method: 'get', path, ...opts });
-  }
-
-  requestAPIList<
-    Item = unknown,
-    PageClass extends Pagination.AbstractPage<Item> = Pagination.AbstractPage<Item>,
-  >(
-    Page: new (...args: ConstructorParameters<typeof Pagination.AbstractPage>) => PageClass,
-    options: FinalRequestOptions,
-  ): Pagination.PagePromise<PageClass, Item> {
-    const request = this.makeRequest(options, null, undefined);
-    return new Pagination.PagePromise<PageClass, Item>(this as any as Legalesign, request, Page);
-  }
-
   async fetchWithTimeout(
     url: RequestInfo,
     init: RequestInit | undefined,
@@ -794,10 +738,10 @@ export class Legalesign {
     }
   }
 
-  static Legalesign = this;
+  static LegalesignSDK = this;
   static DEFAULT_TIMEOUT = 60000; // 1 minute
 
-  static LegalesignError = Errors.LegalesignError;
+  static LegalesignSDKError = Errors.LegalesignSDKError;
   static APIError = Errors.APIError;
   static APIConnectionError = Errors.APIConnectionError;
   static APIConnectionTimeoutError = Errors.APIConnectionTimeoutError;
@@ -813,55 +757,30 @@ export class Legalesign {
 
   static toFile = Uploads.toFile;
 
-  attachment: API.Attachment = new API.Attachment(this);
   document: API.Document = new API.Document(this);
   group: API.Group = new API.Group(this);
-  invited: API.Invited = new API.Invited(this);
-  member: API.Member = new API.Member(this);
-  notifications: API.Notifications = new API.Notifications(this);
   pdf: API.Pdf = new API.Pdf(this);
   signer: API.Signer = new API.Signer(this);
   status: API.Status = new API.Status(this);
-  subscribe: API.Subscribe = new API.Subscribe(this);
   template: API.Template = new API.Template(this);
   templatepdf: API.Templatepdf = new API.Templatepdf(this);
-  unsubscribe: API.Unsubscribe = new API.Unsubscribe(this);
-  user: API.User = new API.User(this);
 }
 
-Legalesign.Attachment = Attachment;
-Legalesign.Document = Document;
-Legalesign.Group = Group;
-Legalesign.Invited = Invited;
-Legalesign.Member = Member;
-Legalesign.Notifications = Notifications;
-Legalesign.Pdf = Pdf;
-Legalesign.Signer = Signer;
-Legalesign.Status = Status;
-Legalesign.Subscribe = Subscribe;
-Legalesign.Template = Template;
-Legalesign.Templatepdf = Templatepdf;
-Legalesign.Unsubscribe = Unsubscribe;
-Legalesign.User = User;
+LegalesignSDK.Document = Document;
+LegalesignSDK.Group = Group;
+LegalesignSDK.Pdf = Pdf;
+LegalesignSDK.Signer = Signer;
+LegalesignSDK.Status = Status;
+LegalesignSDK.Template = Template;
+LegalesignSDK.Templatepdf = Templatepdf;
 
-export declare namespace Legalesign {
+export declare namespace LegalesignSDK {
   export type RequestOptions = Opts.RequestOptions;
-
-  export import MyOffsetPage = Pagination.MyOffsetPage;
-  export { type MyOffsetPageParams as MyOffsetPageParams, type MyOffsetPageResponse as MyOffsetPageResponse };
-
-  export {
-    Attachment as Attachment,
-    type AttachmentResponse as AttachmentResponse,
-    type ListMeta as ListMeta,
-    type AttachmentListResponse as AttachmentListResponse,
-    type AttachmentListParams as AttachmentListParams,
-    type AttachmentUploadParams as AttachmentUploadParams,
-  };
 
   export {
     Document as Document,
     type DocumentStatusEnum as DocumentStatusEnum,
+    type ListMeta as ListMeta,
     type PdfFieldValidationEnum as PdfFieldValidationEnum,
     type DocumentCreateResponse as DocumentCreateResponse,
     type DocumentRetrieveResponse as DocumentRetrieveResponse,
@@ -869,7 +788,6 @@ export declare namespace Legalesign {
     type DocumentGetFieldsResponse as DocumentGetFieldsResponse,
     type DocumentCreateParams as DocumentCreateParams,
     type DocumentListParams as DocumentListParams,
-    type DocumentPreviewParams as DocumentPreviewParams,
   };
 
   export {
@@ -877,51 +795,20 @@ export declare namespace Legalesign {
     type GroupRetrieveResponse as GroupRetrieveResponse,
     type GroupListResponse as GroupListResponse,
     type GroupCreateParams as GroupCreateParams,
-    type GroupUpdateParams as GroupUpdateParams,
     type GroupListParams as GroupListParams,
   };
 
-  export {
-    Invited as Invited,
-    type InvitedListResponse as InvitedListResponse,
-    type InvitedListParams as InvitedListParams,
-  };
-
-  export {
-    Member as Member,
-    type MemberResponse as MemberResponse,
-    type PermissionsEnum as PermissionsEnum,
-    type MemberListResponse as MemberListResponse,
-    type MemberCreateParams as MemberCreateParams,
-    type MemberListParams as MemberListParams,
-  };
-
-  export {
-    Notifications as Notifications,
-    type WebhookEventFilterEnum as WebhookEventFilterEnum,
-    type NotificationListResponse as NotificationListResponse,
-  };
-
-  export { Pdf as Pdf, type PdfCreatePreviewParams as PdfCreatePreviewParams };
+  export { Pdf as Pdf };
 
   export {
     Signer as Signer,
     type SignerStatusEnum as SignerStatusEnum,
     type SignerRetrieveResponse as SignerRetrieveResponse,
-    type SignerGetRejectionReasonResponse as SignerGetRejectionReasonResponse,
     type SignerRetrieveFieldsResponse as SignerRetrieveFieldsResponse,
-    type SignerResetParams as SignerResetParams,
     type SignerSendReminderParams as SignerSendReminderParams,
   };
 
-  export {
-    Status as Status,
-    type StatusResponse as StatusResponse,
-    type StatusRetrieveAllResponse as StatusRetrieveAllResponse,
-    type StatusRetrieveAllParams as StatusRetrieveAllParams,
-  };
-
-  export { Subscribe as Subscribe, type SubscribeCreateWebhookParams as SubscribeCreateWebhookParams };
+  export { Status as Status, type StatusRetrieveResponse as StatusRetrieveResponse };
 
   export {
     Template as Template,
@@ -939,18 +826,5 @@ export declare namespace Legalesign {
     type TemplatepdfGetEditLinkResponse as TemplatepdfGetEditLinkResponse,
     type TemplatepdfCreateParams as TemplatepdfCreateParams,
     type TemplatepdfListParams as TemplatepdfListParams,
-  };
-
-  export {
-    Unsubscribe as Unsubscribe,
-    type UnsubscribeDeleteWebhookParams as UnsubscribeDeleteWebhookParams,
-  };
-
-  export {
-    User as User,
-    type TimezoneEnum as TimezoneEnum,
-    type UserRetrieveResponse as UserRetrieveResponse,
-    type UserCreateParams as UserCreateParams,
-    type UserUpdateParams as UserUpdateParams,
   };
 }

@@ -1,7 +1,7 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 import { APIResource } from '../core/resource';
-import * as AttachmentAPI from './attachment';
+import * as DocumentAPI from './document';
 import { APIPromise } from '../core/api-promise';
 import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
@@ -78,24 +78,6 @@ export class Template extends APIResource {
   ): APIPromise<TemplateListResponse> {
     return this._client.get('/template/', { query, ...options });
   }
-
-  /**
-   * Archives a template (is recoverable, i.e. not fully deleted, if you need true
-   * data deletion contact us).
-   *
-   * @example
-   * ```ts
-   * await client.template.archive(
-   *   '182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e',
-   * );
-   * ```
-   */
-  archive(templateID: string, options?: RequestOptions): APIPromise<void> {
-    return this._client.delete(path`/template/${templateID}/`, {
-      ...options,
-      headers: buildHeaders([{ Accept: '*/*' }, options?.headers]),
-    });
-  }
 }
 
 export interface TemplateRetrieveResponse {
@@ -123,7 +105,7 @@ export interface TemplateRetrieveResponse {
 }
 
 export interface TemplateListResponse {
-  meta?: AttachmentAPI.ListMeta;
+  meta?: DocumentAPI.ListMeta;
 
   objects?: Array<TemplateListResponse.Object>;
 }
