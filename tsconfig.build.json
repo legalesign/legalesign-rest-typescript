@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "legalesign-sdk/*": ["dist/src/*"],
-      "legalesign-sdk": ["dist/src/index.ts"]
+      "legalesign-sdk/*": ["./dist/src/*"],
+      "legalesign-sdk": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
