@@ -7,10 +7,9 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "baseUrl": "./",
     "paths": {
-      "legalesign-sdk/*": ["src/*"],
-      "legalesign-sdk": ["src/index.ts"]
+      "legalesign-sdk/*": ["./src/*"],
+      "legalesign-sdk": ["./src/index.ts"]
     },
     "noEmit": true,
 
